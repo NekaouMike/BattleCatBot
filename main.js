@@ -9,7 +9,7 @@ const client = new Client({ intents: [
   GatewayIntentBits.GuildMessages,
   GatewayIntentBits.MessageContent,] 
 });
-
+const mongo = require
 const fs = require('fs');
 
 function resfreshData() {
@@ -17,12 +17,12 @@ function resfreshData() {
     let data = fs.readFileSync('./config.json')
         return JSON.parse(data);
 }
-async function adjustconfig(key, value) {
-    let botdata = await resfreshData();
-    botdata[key] = value;
-    const data = JSON.stringify(botdata, null, 2);
-    fs.writeFileSync('./config.json', data);
-}
+// async function adjustconfig(key, value) {
+//     let botdata = await resfreshData();
+//     botdata[key] = value;
+//     const data = JSON.stringify(botdata, null, 2);
+//     fs.writeFileSync('./config.json', data);
+// }
 
 client.on('ready', () => {
     console.log(`Logged in as ${client.user.tag}!`);
@@ -54,6 +54,15 @@ client.on('ready', () => {
             case 'BOOLEAN':
             commandData.addBooleanOption(option => option.setName(optione.name).setDescription(optione.description).setRequired(optione.required));
             break;
+            case 'USER':
+            commandData.addUserOption(option => option.setName(optione.name).setDescription(optione.description).setRequired(optione.required));
+            break;
+        }
+        if(optione.choices != undefined){
+            for(var k = 0; k < optione.choices.length; k++) {
+                const choice = optione.choices[k];
+                commandData.addChoice(choice.name, choice.value);
+            }
         }
     }
     }
@@ -87,7 +96,9 @@ client.on('interactionCreate', async interaction => {
                 .setFooter('Made by: NekaouMike')
                 return interaction.reply({ embeds: [infoembed] });
                 break;
+            case 'battle':
                 
+            break;
 
         }
     }
